@@ -9,7 +9,6 @@ import { SigninButton } from "./signin-button";
 
 export async function SiteHeader() {
   const session = await auth();
-  console.log(session);
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container grid grid-cols-[auto_1fr] h-14 max-w-screen-2xl items-center ">

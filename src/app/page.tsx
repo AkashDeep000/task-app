@@ -9,7 +9,7 @@ export default async function Home() {
         <TaskAdd />
       ) : (
         <h2 className="text-lg">
-          The app is in "Work in progress" state. Sign in to see the currently
+          The app is in &quot;Work in progress&quot; state. Sign in to see the currently
           implimented feature.
         </h2>
       )}

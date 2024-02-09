@@ -6,7 +6,9 @@ import {
   integer,
   boolean,
   pgEnum,
+  uuid,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm"
 import type { AdapterAccount } from "@auth/core/adapters";
 
 export const users = pgTable("user", {
@@ -16,6 +18,10 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  tasks: many(tasks),
+}));
 
 export const accounts = pgTable(
   "account",
@@ -64,18 +70,22 @@ export const verificationTokens = pgTable(
 export const priorityEnum = pgEnum("priority", ["low", "normal", "high"]);
 
 export const tasks = pgTable("task", {
-  id: text("id").notNull().primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
   title: text("title").notNull(),
-  description: text("description"),
+  description: text("description").notNull(),
   isCompleted: boolean("isCompleted").notNull(),
   priority: priorityEnum("priority").notNull(),
+  userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
 });
 
-export const usersToTasks = pgTable("usersToTasks", {
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id),
-  taskId: text("taskId")
-    .notNull()
-    .references(() => tasks.id),
-});
+export type Task = typeof tasks.$inferSelect
+
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  author: one(users, {
+    fields: [tasks.userId],
+    references: [users.id],
+  }),
+}));
+

@@ -8,6 +8,9 @@ export default async function Home() {
     <div className="mx-auto w-full max-w-2xl p-4">
       {session?.user ? (
         <>
+        <h2 className="text-lg text-center p-6">
+          The app is in &quot;Work in progress&quot; state. Many feature will not work.
+        </h2>
         <TaskAdd />
         <TaskList userId={session.user.id}/>
         </>
